@@ -2,7 +2,7 @@
   var tradeMath = (function() {
     return {
 
-      riskReward: function riskReward(dir, entry, exit, stop) {
+      riskReward: function riskReward(entry, exit, stop) {
         if (!dir || !entry || !exit || !stop) return 0;
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
