@@ -8,7 +8,10 @@
       },
 
       qty: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
-        if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) return 0;
+        if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) {
+          console.error(new Error('missing parameters for qty'));
+          return 0;
+        }  
         const l = direction === 'long' ? 1 : -1;
         const risk = balance * risk_percent/100;
         const fees = entry_fee_rate/100 / entry + exit_fee_rate/100 /stop;
