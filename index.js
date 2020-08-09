@@ -7,7 +7,7 @@
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
-      qty: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, linear = false) {
+      qty: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
         if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) return 0;
         const l = direction === 'long' ? 1 : -1;
         const risk = balance * risk_percent/100;
@@ -18,7 +18,7 @@
               risk
               /
               (
-                (l/stop - l/entry + fees) * (linear ? entry : 1)
+                (l/stop - l/entry + fees) * (inverse ? 1 : entry)
               )
             ) 
           ) || 0
