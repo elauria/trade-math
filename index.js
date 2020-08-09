@@ -3,7 +3,7 @@
     return {
 
       riskReward: function riskReward(entry, exit, stop) {
-        if (!dir || !entry || !exit || !stop) return 0;
+        if (!entry || !exit || !stop) return 0;
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
