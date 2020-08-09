@@ -1,5 +1,5 @@
 {
-  "name": "@elauria/trade-math",
+  "name": "trade-math",
   "version": "1.0.0",
   "description": "math utils for trade calculations",
   "main": "index.js",
