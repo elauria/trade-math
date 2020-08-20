@@ -7,7 +7,7 @@
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
-      qty: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
+      positionSize: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
         if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) {
           console.error(new Error('missing parameters for qty'));
           return 0;
@@ -28,31 +28,24 @@
         );
       },
 
-      activeRisk: function activeRisk(balance, entry, stop, qty) {
-        return (
-          Math.round((10000 * (qty * Math.abs(1 / stop - 1 / entry))) / balance) /
-            100 || 0
-        );
-      },
-
       avgPrice: function avgPrice(q1, p1, q2, p2) {
         if (!q1 || !q2 || !p2) return p1;
           return Math.round(((q1 + q2) / (q1 / p1 + q2 / p2)) * 100) / 100;
       },
 
-      riskPercent: function riskPercent(balance, qty, entry, stop) {
-        if (qty === 0) return 0;
-        if (balance && qty && entry && stop) {
-          var rp = (qty * Math.abs(1 / stop - 1 / entry)) / balance;
-          return Math.round(rp * 10000) / 100;
-        }
+      riskPercent: function riskPercent(balance, qty, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse) {
+        const ev = qty/entryPrice;
+        const xv = qty/stopPrice
+        return Math.round(
+          ( Math.abs(ev-xv)+(entryFeeRate*ev)+(exitFeeRate*xv) )*10000
+        )/100;
       },
 
-      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees) {
+      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate) {
       let be =
           direction === "short"
-            ? 0.99925 / (1 / entry_price + fees / total_qty)
-            : 1.00075 / (1 / entry_price - fees / total_qty);
+            ? (1-exitFeeRate) / (1 / entry_price + fees / total_qty)
+            : (1+exitFeeRate) / (1 / entry_price - fees / total_qty);
         return Math.round(be * 100) / 100;
       },
 
