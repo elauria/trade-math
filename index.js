@@ -7,7 +7,7 @@
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
-      positionSize: function qty(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
+      positionSize: function positionSize(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
         if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) {
           console.error(new Error('missing parameters for qty'));
           return 0;
