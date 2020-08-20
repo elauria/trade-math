@@ -7,13 +7,16 @@
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
-      positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate) {
+      positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse) {
         if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
         return Math.round(
-          (balance * riskPercent/100)
-          /
-          (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)*100
+          (
+            (balance * riskPercent/100)
+            /
+            (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)
+
+          )/(inverse?1:entryPrice) *100
         )/100;
       },
 
