@@ -10,7 +10,11 @@
       positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate) {
         if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
-        return (balance * riskPercent/100) / (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)
+        return Math.round(
+          (balance * riskPercent/100)
+          /
+          (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)*100
+        )/100;
       },
 
       avgPrice: function avgPrice(q1, p1, q2, p2) {
