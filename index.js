@@ -7,25 +7,10 @@
         return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
       },
 
-      positionSize: function positionSize(direction, balance, risk_percent, entry, stop, entry_fee_rate, exit_fee_rate, inverse = false) {
-        if (!direction || !balance || !risk_percent || !entry || !stop || !entry_fee_rate || !exit_fee_rate) {
-          console.error(new Error('missing parameters for qty'));
-          return 0;
-        }  
-        const l = direction === 'long' ? 1 : -1;
-        const risk = balance * risk_percent/100;
-        const fees = entry_fee_rate/100 / entry + exit_fee_rate/100 /stop;
-        return (
-          Math.round(
-            Math.abs(
-              risk
-              /
-              (
-                (l/stop - l/entry + fees) * (inverse ? 1 : entry)
-              )
-            ) 
-          ) || 0
-        );
+      positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate) {
+        if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
+        const d = entryPrice > stopPrice ? -1 : 1;
+        return (balance * riskPercent/100) / (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)
       },
 
       avgPrice: function avgPrice(q1, p1, q2, p2) {
@@ -33,12 +18,12 @@
           return Math.round(((q1 + q2) / (q1 / p1 + q2 / p2)) * 100) / 100;
       },
 
-      riskPercent: function riskPercent(balance, qty, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse) {
+      riskPercent: function riskPercent(balance, qty, entryPrice, stopPrice, entryFeeRate, exitFeeRate) {
         const ev = qty/entryPrice;
         const xv = qty/stopPrice
         return Math.round(
           ( Math.abs(ev-xv)+(entryFeeRate*ev)+(exitFeeRate*xv) )*10000
-        )/100;
+        )/(balance*100);
       },
 
       breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate) {
