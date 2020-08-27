@@ -25,7 +25,8 @@
           return Math.round(((q1 + q2) / (q1 / p1 + q2 / p2)) * 100) / 100;
       },
 
-      riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice) {
+      riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice, inverse=true) {
+        qty = inverse ? qty : qty * entryPrice;
         return Math.round((100/balance)*Math.abs((qty/entryPrice)-(qty/exitPrice))*100)/100;
       },
 
