@@ -16,7 +16,7 @@
             /
             (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)
 
-          )/(!!inverse?1:entryPrice) * (1/precision)
+          )/(!!inverse?1:entryPrice*entryPrice) * (1/precision)
         )/(1/precision);
       },
 
