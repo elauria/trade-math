@@ -1,4 +1,12 @@
 (function() {
+  const round = function round(amount, precision = 1) {
+    return Math.round(amount * 1/precision)/(1/precision);
+  };
+
+  const floor = function floor(amount, precision = 1) {
+    return Math.floor(amount * 1/precision)/(1/precision);
+  };
+
   var tradeMath = (function() {
     return {
 
@@ -10,14 +18,22 @@
       positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
         if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
-        return Math.floor(
+        let ps =
           (
-            (balance * riskPercent/100)
-            /
-            (d/entryPrice - d/stopPrice + entryFeeRate/entryPrice + exitFeeRate/stopPrice)
-
-          )/(!!inverse?1:entryPrice*entryPrice) * (1/precision)
-        )/(1/precision);
+            balance
+            *
+            riskPercent/100
+          )
+          /
+          (
+            d/entryPrice
+            - d/stopPrice
+            + entryFeeRate/entryPrice
+            + exitFeeRate/stopPrice
+          );
+        if (!inverse)
+          ps = ps / (entryPrice*entryPrice);
+        return floor(ps, precision);
       },
 
       avgPrice: function avgPrice(q1, p1, q2, p2) {
@@ -26,8 +42,11 @@
       },
 
       riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice, inverse) {
-        qty = !!inverse ? qty : qty * entryPrice;
-        return Math.round((100/balance)*Math.abs((qty/entryPrice)-(qty/exitPrice))*100)/100;
+        if (!inverse) {
+          qty = qty * entryPrice;
+          balance = balance / entryPrice;
+        }
+        return round((100/balance)*Math.abs((qty/entryPrice)-(qty/exitPrice)), 0.01);
       },
 
       breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate) {
@@ -37,10 +56,6 @@
             : (1+exitFeeRate) / (1 / entry_price - fees / total_qty);
         return Math.round(be * 100) / 100;
       },
-
-      fixed8: function fixed8(number) {
-        return Math.floor(number * 100000000) / 100000000;
-      }
     }
   })();
 
