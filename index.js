@@ -12,7 +12,7 @@
 
       riskReward: function riskReward(entry, exit, stop) {
         if (!entry || !exit || !stop) return 0;
-        return Math.round(((exit - entry) / (entry - stop)) * 100) / 100;
+        return round((exit - entry) / (entry - stop), 0.01);
       },
 
       positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
@@ -38,7 +38,7 @@
 
       avgPrice: function avgPrice(q1, p1, q2, p2) {
         if (!q1 || !q2 || !p2) return p1;
-          return Math.round(((q1 + q2) / (q1 / p1 + q2 / p2)) * 100) / 100;
+        return round(((q1 + q2) / (q1 / p1 + q2 / p2)), 0.01);
       },
 
       riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice, inverse) {
@@ -54,7 +54,7 @@
           direction === "short"
             ? (1-exitFeeRate) / (1 / entry_price + fees / total_qty)
             : (1+exitFeeRate) / (1 / entry_price - fees / total_qty);
-        return Math.round(be * 100) / 100;
+        return round(be, 0.01);
       },
     }
   })();
