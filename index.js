@@ -9,6 +9,8 @@
 
   var tradeMath = (function() {
     return {
+      round,
+      floor,
 
       riskReward: function riskReward(entry, exit, stop) {
         if (!entry || !exit || !stop) return 0;
