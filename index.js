@@ -1,9 +1,11 @@
 (function() {
   const round = function round(amount, precision = 1) {
+    precision = precision <= 1 ? precision : 1/Math.pow(10, precision);
     return Math.round(amount * 1/precision)/(1/precision);
   };
 
   const floor = function floor(amount, precision = 1) {
+    precision = precision <= 1 ? precision : 1/Math.pow(10, precision);
     return Math.floor(amount * 1/precision)/(1/precision);
   };
 
