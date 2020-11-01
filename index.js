@@ -40,17 +40,34 @@
         return floor(ps, precision);
       },
 
-      avgPrice: function avgPrice(q1, p1, q2, p2) {
-        if (!q1 || !q2 || !p2) return p1;
-        return round(((q1 + q2) / (q1 / p1 + q2 / p2)), 0.01);
-      },
-
       riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice, inverse) {
         if (!inverse) {
           qty = qty * entryPrice;
           balance = balance / entryPrice;
         }
         return round((100/balance)*Math.abs((qty/entryPrice)-(qty/exitPrice)), 0.01);
+      },
+
+      initialRisk: function initialRisk(positionSize, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
+        if (!positionSize || !entryPrice || !stopPrice || !entryFeeRate || !exitFeeRate) return 0;
+        const d = entryPrice > stopPrice ? -1 : 1;
+        let r =
+          positionSize
+          *
+          (
+            d/entryPrice
+            - d/stopPrice
+            + entryFeeRate/entryPrice
+            + exitFeeRate/stopPrice
+          );
+        if (!inverse)
+          r = r * entryPrice;
+        return round(r, precision);
+      },
+
+      avgPrice: function avgPrice(q1, p1, q2, p2) {
+        if (!q1 || !q2 || !p2) return p1;
+        return round(((q1 + q2) / (q1 / p1 + q2 / p2)), 0.01);
       },
 
       breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate) {
