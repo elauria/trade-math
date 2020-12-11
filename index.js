@@ -16,14 +16,14 @@
 
       // R-Multiple for a trade. How many units risked will be rewarded if targets are met.
       riskReward: function riskReward(entry, exit, stop) {
-        if (!entry || !exit || !stop) return 0;
+        if (isNaN(entry) || isNaN(exit) || isNaN(stop)) return 0;
         return round((exit - entry) / (entry - stop));
       },
 
       // Returns the amount of contracts for a given percentual risk from an starting balance
       // How many contracts should be bought/sell in order to risk a specified percentage of the initial balance
       positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
-        if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
+        if (isNaN(balance) || isNaN(riskPercent) || isNaN(entryPrice) || isNaN(stopPrice) || isNaN(entryFeeRate)) return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
         let ps =
           (
@@ -60,7 +60,8 @@
       // Returns the amout of capital at risk given a position size and entry and stop parameters
       // This is the amount of collateral that would be lost if a stop is met
       initialRisk: function initialRisk(positionSize, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
-        if (!positionSize || !entryPrice || !stopPrice || !entryFeeRate || !exitFeeRate) return 0;
+        if (isNaN(positionSize) || isNaN(entryPrice) || isNaN(stopPrice) || isNaN(entryFeeRate) || isNaN(exitFeeRate))
+          return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
         let r =
           positionSize
@@ -79,7 +80,7 @@
       // volume adjusted average price
       // useful to calculate average entry and average exit prices
       avgPrice: function avgPrice(q1, p1, q2, p2) {
-        if (!q1 || !q2 || !p2) return p1;
+        if (isNaN(q1) || isNaN(q2) || isNaN(p2)) return p1;
         return round(((q1 + q2) / (q1 / p1 + q2 / p2)));
       },
 
@@ -93,13 +94,13 @@
       },
 
       // return on investment; fees must include all trading and funding fees
-      roi: function roi(pnl, investment, fees) {
-        if (!pnl || !investment || !fees) return 0;
+      roi: function roi(pnl, investment, fees = 0) {
+        if (isNaN(pnl) || isNaN(investment)) return 0;
         return round(pnl/(investment+fees)*100);
       },
 
       gainLossPercent: function gainLossPercent(initialBalance, pnl) {
-        if (!initialBalance || isNaN(pnl)) return 0;
+        if (isNaN(initialBalance) || isNaN(pnl)) return 0;
         const finalBalance = initialBalance + pnl;
         return round(100*(finalBalance/initialBalance - 1));
       }
