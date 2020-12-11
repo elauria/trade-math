@@ -1,6 +1,6 @@
 {
   "name": "trade-math",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": "math utils for trade calculations",
   "main": "index.js",
   "scripts": {
