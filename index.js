@@ -80,7 +80,7 @@
       // volume adjusted average price
       // useful to calculate average entry and average exit prices
       avgPrice: function avgPrice(q1, p1, q2, p2) {
-        if (isNaN(q1) || isNaN(q2) || isNaN(p2)) return p1;
+        if (!q1 || !q2 || !p2) return p1;
         return round(((q1 + q2) / (q1 / p1 + q2 / p2)));
       },
 
