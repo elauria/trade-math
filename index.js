@@ -101,7 +101,7 @@
       gainLossPercent: function gainLossPercent(initialBalance, pnl) {
         if (!initialBalance || isNaN(pnl)) return 0;
         const finalBalance = initialBalance + pnl;
-        return round(100*(1 - finalBalance/initialBalance));
+        return round(100*(finalBalance/initialBalance - 1));
       }
     }
   })();
