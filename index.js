@@ -43,18 +43,23 @@
         return floor(ps, precision);
       },
 
-      // Returns the percent of an account balance that is at risk, given a position size and entry and exit parameters
-      riskPercent: function riskPercent(balance, qty, entryPrice, exitPrice, entryFeeRate, exitFeeRate, inverse) {
+      // Returns the percent of a balance that is at risk, given a position size and entry and exit parameters
+      riskPercent: function riskPercent(balance, qty, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse) {
         if (!inverse) {
           qty = qty * entryPrice;
           balance = balance / entryPrice;
         }
-        return round((100/balance)*Math.abs(
-          (qty/entryPrice)
-          - (qty/exitPrice)
-          + (entryFeeRate/entryPrice)
-          + (entryFeeRate/exitPrice)
-        ));
+        const d = entryPrice > stopPrice ? -1 : 1;
+        const risk =
+          qty
+          *
+          (
+            d/entryPrice
+            - d/stopPrice
+            + entryFeeRate/entryPrice
+            + exitFeeRate/stopPrice
+          );
+        return round((100/balance)*risk);
       },
 
       // Returns the amout of capital at risk given a position size and entry and stop parameters
