@@ -90,12 +90,17 @@
       },
 
       // price at which the position can be closed without profits or losses, including fees
-      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate) {
-      let be =
+      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate, inverse = false) {
+      if (!inverse) {
+        total_qty *= entry_price;
+        fees /= entry_price;
+      }
+      return
+        round(
           direction === "short"
             ? (1-exitFeeRate) / (1 / entry_price + fees / total_qty)
-            : (1+exitFeeRate) / (1 / entry_price - fees / total_qty);
-        return round(be);
+            : (1+exitFeeRate) / (1 / entry_price - fees / total_qty)
+        );
       },
 
       // return on investment; fees must include all trading and funding fees
