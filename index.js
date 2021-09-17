@@ -122,7 +122,7 @@
         const avgWinP = avgWin/initialCapital;
         const avgLossP = avgLoss/initialCapital;
         const lossp = 1-winp;
-        const Z = round(winp * avgWinP - Math.abs(lossp * avgLossP));
+        const Z = winp * avgWinP - Math.abs(lossp * avgLossP);
         const A = Math.pow(winp * Math.pow(avgWinP, 2) + Math.abs( lossp * Math.pow(avgLossP, 2) ), 0.5);
         const P = 0.5*(1+Z/A);
         const RoR = Math.pow((1-P)/P, (maxRisk/A));
