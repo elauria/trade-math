@@ -24,7 +24,7 @@
 
       // Returns the amount of contracts for a given percentual risk from an starting balance
       // How many contracts should be bought/sell in order to risk a specified percentage of the initial balance
-      positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
+      positionSize: function positionSize(balance, riskPercent, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse) {
         if (!balance || !riskPercent || !entryPrice || !stopPrice || !entryFeeRate) return 0;
         const d = entryPrice > stopPrice ? -1 : 1;
         let ps =
@@ -42,7 +42,7 @@
           );
         if (!inverse)
           ps = ps / (entryPrice*entryPrice);
-        return floor(ps, precision);
+        return ps;
       },
 
       // Returns the percent of a balance that is at risk, given a position size and entry and exit parameters
@@ -92,7 +92,8 @@
       },
 
       // price at which the position can be closed without profits or losses, including fees
-      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, fees, exitFeeRate, inverse = false) {
+      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, entryFeeRate, exitFeeRate, inverse = false) {
+        let fees = total_qty * entryFeeRate;
         if (!inverse) {
           total_qty *= entry_price;
           fees /= entry_price;
