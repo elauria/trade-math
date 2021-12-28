@@ -92,17 +92,16 @@
       },
 
       // price at which the position can be closed without profits or losses, including fees
-      breakEvenPrice: function breakEvenPrice(direction, total_qty, entry_price, entryFeeRate, exitFeeRate, inverse = false) {
-        let fees = total_qty * entryFeeRate;
+      breakEvenPrice: function breakEvenPrice(direction, qty, entry_price, entryFeeRate, exitFeeRate, inverse = false) {
         if (!inverse) {
-          total_qty *= entry_price;
-          fees /= entry_price;
+          qty *= entry_price;
         }
+        const fees = (qty/entry_price)*entryFeeRate;;
         const be = 
           round(
             direction === "short"
-              ? (1-exitFeeRate) / (1 / entry_price + fees / total_qty)
-              : (1+exitFeeRate) / (1 / entry_price - fees / total_qty)
+              ? (1-exitFeeRate) / (1 / entry_price + fees / qty)
+              : (1+exitFeeRate) / (1 / entry_price - fees / qty)
           );
         return be;
       },
