@@ -92,7 +92,7 @@
       },
 
       // price at which the position can be closed without profits or losses, including fees
-      breakEvenPrice: function breakEvenPrice(direction, qty, entry_price, entryFeeRate, exitFeeRate, inverse = false) {
+      breakEvenPrice: function breakEvenPrice(direction, qty, entry_price, entryFeeRate, exitFeeRate, inverse = false, precision) {
         if (!inverse) {
           qty *= entry_price;
         }
@@ -102,7 +102,7 @@
             direction === "short"
               ? (1-exitFeeRate) / (1 / entry_price + fees / qty)
               : (1+exitFeeRate) / (1 / entry_price - fees / qty)
-          );
+          , precision);
         return be;
       },
 
