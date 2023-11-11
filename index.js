@@ -66,12 +66,14 @@
 
       // Returns the amout of capital at risk given a position size and entry and stop parameters
       // This is the amount of collateral that would be lost if a stop is met
+      // Negative result indicates a loss of capital, positive restuls indicate a profit (negative collateral risk)
       collateralRisk: function initialRisk(positionSize, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
         if (!positionSize || !entryPrice || !stopPrice || !entryFeeRate || !exitFeeRate)
           return 0;
         const v1 = entryPrice*positionSize
         const v2 = stopPrice*positionSize
-        let c = Math.abs(v1-v2);
+        let c = v1-v2;
+        if (entryPrice < stopPrice) c *= -1;
         c = inverse ? c*entryPrice : c;
         return round(c, precision);
       },
