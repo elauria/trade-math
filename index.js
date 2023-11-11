@@ -66,22 +66,14 @@
 
       // Returns the amout of capital at risk given a position size and entry and stop parameters
       // This is the amount of collateral that would be lost if a stop is met
-      initialRisk: function initialRisk(positionSize, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
+      collateralRisk: function initialRisk(positionSize, entryPrice, stopPrice, entryFeeRate, exitFeeRate, inverse, precision=1) {
         if (!positionSize || !entryPrice || !stopPrice || !entryFeeRate || !exitFeeRate)
           return 0;
-        const d = entryPrice > stopPrice ? -1 : 1;
-        let r =
-          positionSize
-          *
-          (
-            d/entryPrice
-            - d/stopPrice
-            + entryFeeRate/entryPrice
-            + exitFeeRate/stopPrice
-          );
-        if (!inverse)
-          r = r * entryPrice;
-        return round(r, precision);
+        const v1 = entryPrice*positionSize
+        const v2 = stopPrice*positionSize
+        let c = Math.abs(v1-v2);
+        c = inverse ? c*entryPrice : c;
+        return round(c, precision);
       },
 
       // volume adjusted average price
