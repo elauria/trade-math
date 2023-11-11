@@ -72,8 +72,7 @@
           return 0;
         const v1 = entryPrice*positionSize
         const v2 = stopPrice*positionSize
-        let c = v1-v2;
-        if (entryPrice < stopPrice) c *= -1;
+        let c = -1*(v1-v2);
         c = inverse ? c*entryPrice : c;
         return round(c, precision);
       },
