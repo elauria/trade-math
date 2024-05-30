@@ -1,8 +1,8 @@
 (function() {
   const round = function round(amount, precision = 0.01) {
-    precision = precision <= 1 ? precision : 1/Math.pow(10, precision);
-    const i = Math.round(1/precision);
-    return Math.round(amount * i)/i;
+    const i = precision <= 1 ? Math.round(1/precision) : precision;
+    if (amount > i) return Math.round(amount/i)*i;
+    return Math.round(amount*i)/i;
   };
 
   const floor = function floor(amount, precision = 0.01) {
