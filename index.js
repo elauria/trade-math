@@ -81,9 +81,9 @@
 
       // volume adjusted average price
       // useful to calculate average entry and average exit prices
-      avgPrice: function avgPrice(q1, p1, q2, p2) {
+      avgPrice: function avgPrice(q1, p1, q2, p2, precision) {
         if (!q1 || !q2 || !p2) return p1;
-        return round(((q1 + q2) / (q1 / p1 + q2 / p2)));
+        return round((q1 + q2) / (q1 / p1 + q2 / p2), precision);
       },
 
       // price at which the position can be closed without profits or losses, including fees
