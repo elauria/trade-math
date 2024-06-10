@@ -124,6 +124,22 @@
         const P = 0.5*(1+Z/A);
         const RoR = Math.pow((1-P)/P, (maxRisk/A));
         return RoR;
+      },
+      drawdown: function drawdown(initialBalance, pnls) {
+        if (!initialBalance || !pnls || pnls.length === 0) return NaN;
+        let workingCapital = initialBalance;
+        let peakCapital = initialBalance;
+        let dd = [];
+        pnls.forEach((pnl) => {
+          workingCapital += pnl;
+          if (workingCapital < peakCapital)
+            dd.push((100 / peakCapital) * workingCapital - 100);
+          else {
+            peakCapital = workingCapital;
+            dd.push(0);
+          }
+        });
+        return round(Math.min(...dd));
       }
     }
   })();
